@@ -16,7 +16,7 @@ pipeline {
         stage('Check Files') {
             steps {
                 sh 'ls -ltr'
-                sh 'sudo docker ps'
+                sh 'docker ps'
             }
         }
 
@@ -29,12 +29,12 @@ pipeline {
                 )]) {
                     sh '''
                         cd blog
-                        sudo docker build -t DevOps-proj .
-                        sudo docker tag DevOps-proj rachita06/DevOps-proj:v1
+                        docker build -t DevOps-proj .
+                        docker tag DevOps-proj rachita06/DevOps-proj:v1
 
-                        echo "$DOCKER_PASS" | sudo docker login -u "$DOCKER_USER" --password-stdin
-                        sudo docker push rachita06/DevOps-proj:v1
-                        sudo docker logout
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push rachita06/DevOps-proj:v1
+                        docker logout
                     '''
                 }
             }

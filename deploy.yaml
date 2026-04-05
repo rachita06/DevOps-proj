@@ -13,10 +13,10 @@ spec:
       app: blog
   template:
     metadata:
-      name: temp-blog
+      name: devops-proj
       labels:
         app: blog
     spec:
       containers:
         - name: blog
-          image: amcnssstd/blogimg01:v1
+          image: amcnssstd/devops-proj:v1

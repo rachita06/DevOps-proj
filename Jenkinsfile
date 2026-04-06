@@ -40,7 +40,7 @@ stage('Deploy to Kubernetes') {
             steps {
                 sh '''
                 kubectl config use-context docker-desktop
-                kubectl apply -f kubernates/deployment.yaml
+                kubectl apply -f kubernates/deploy.yaml
                 '''
             }
         }

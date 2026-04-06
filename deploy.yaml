@@ -19,4 +19,4 @@ spec:
     spec:
       containers:
         - name: blog
-          image: amcnssstd/devops-proj:v1
+          image: rachita06/devops-proj:v1

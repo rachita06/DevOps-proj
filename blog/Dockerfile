@@ -1,14 +1,10 @@
-FROM ubuntu:22.04
+FROM jenkins/jenkins:lts
 
-# Install Java, Docker, Git, Curl
+USER root
+
+# Install docker client only (no daemon needed)
 RUN apt-get update && \
-    apt-get install -y openjdk-11-jdk docker.io git curl && \
+    apt-get install -y docker.io && \
     apt-get clean
 
-# Download latest Jenkins LTS war
-RUN curl -fsSL https://get.jenkins.io/war-stable/latest/jenkins.war -o /usr/share/jenkins.war
-
-WORKDIR /app
-
-# Run Jenkins
-CMD ["java", "-jar", "/usr/share/jenkins.war"]
+USER jenkins

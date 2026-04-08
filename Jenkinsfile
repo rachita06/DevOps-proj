@@ -39,7 +39,7 @@ pipeline {
 	     }
 stage('Tag the image') {
 steps {
-sh 'sudo docker image tag blogimg01 rachita06/blogimg01:v1'
+sh ' docker image tag blogimg01 rachita06/blogimg01:v1'
 }
 }
 stage('Push the iamge to Docker Hub') {

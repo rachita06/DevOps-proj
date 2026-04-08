@@ -1,72 +1,77 @@
 pipeline {
-    agent any
-     options {
-        buildDiscarder(logRotator(numToKeepStr: '5'))
+agent any
+
+```
+options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+}
+
+stages {
+
+    stage('Checkout') {
+        steps {
+            git branch: 'main',
+                url: 'https://github.com/rachita06/DevOps-proj.git',
+                credentialsId: 'git-06'
+        }
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/rachita06/DevOps-proj.git',
-                    credentialsId: 'git-06'
+    stage('Check Files') {
+        steps {
+            sh 'ls -ltr'
+            sh 'docker ps'
+        }
+    }
+
+    stage('Docker Login') {
+        steps {
+            withCredentials([usernamePassword(
+                credentialsId: 'docker-06',
+                usernameVariable: 'DOCKER_USER',
+                passwordVariable: 'DOCKER_PASS'
+            )]) {
+                sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
             }
         }
-	stage('Check Files') {
-	   steps {
-	      sh 'ls -ltr'
-	      sh ' docker ps'
+    }
+
+    stage('Build Image') {
+        steps {
+            sh 'cd blog && docker build -t blogimg01 .'
         }
-	}
+    }
 
-       stage('Docker Login') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-06',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )])
-		{
-            sh 'echo $DOCKER_PASS |  docker login -u $DOCKER_USER --password-stdin'
+    stage('Tag the image') {
+        steps {
+            sh 'docker tag blogimg01 rachita06/blogimg01:v1'
         }
-		}
-		}
-      
-      stage('Build Image') {
-      steps {
-             sh 'cd blog &&  docker build -t blogimg01 .'
-	     }
-	     }
-stage('Tag the image') {
-steps {
-sh 'docker tag blogimg01 rachita06/blogimg01:v1'
-}
-}
-stage('Push the iamge to Docker Hub') {
-steps {
-// sh 'echo "$DOCKER_PASS" |  docker login -u "$DOCKER_USER" --password-stdin'
-sh ' docker push rachita06/blogimg01:v1'
-sh ' docker logout'
+    }
+
+    stage('Push the image to Docker Hub') {
+        steps {
+            sh 'docker push rachita06/blogimg01:v1'
+            sh 'docker logout'
+        }
+    }
+
+    stage('Kubernetes Deploy') {
+        steps {
+            sh '''
+            kubectl apply -f k8/deploy.yaml
+            kubectl apply -f k8/service.yaml
+            '''
+        }
+    }
 }
 
-}
-stage('kubernates Deploy'){
-steps{
-
-sh '''
-kubectl apply -f k8/deploy.yaml
-kubectl apply -f k8/service.yaml
-'''
-}
-}
 post {
-success{
-echo "pipeline successful"
+    success {
+        echo "pipeline successful"
+    }
+    failure {
+        echo "pipeline failed"
+    }
 }
-failure
-{
-echo"pipeline failed"
-}
-}
+```
 
 }

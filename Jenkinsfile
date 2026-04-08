@@ -27,14 +27,14 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )])
 		{
-            sh 'echo $DOCKER_PASS | sudo docker login -u $DOCKER_USER --password-stdin'
+            sh 'echo $DOCKER_PASS |  docker login -u $DOCKER_USER --password-stdin'
         }
 		}
 		}
       
       stage('Build Image') {
       steps {
-             sh 'cd blog && sudo docker build -t blogimg01 .'
+             sh 'cd blog &&  docker build -t blogimg01 .'
 	     }
 	     }
 stage('Tag the image') {

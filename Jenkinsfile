@@ -54,24 +54,4 @@ stages {
         }
     }
 
-    stage('Kubernetes Deploy') {
-        steps {
-            sh '''
-            kubectl apply -f k8/deploy.yaml
-            kubectl apply -f k8/service.yaml
-            '''
-        }
-    }
-}
-
-post {
-    success {
-        echo "pipeline successful"
-    }
-    failure {
-        echo "pipeline failed"
-    }
-}
-```
-
-}
+ }

@@ -8,7 +8,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/rachita06/DevOps.git',
+                    url: 'https://github.com/rachita06/DevOps-proj.git',
                     credentialsId: 'git-06'
             }
         }

@@ -44,9 +44,9 @@ sh 'sudo docker image tag blogimg01 rachita06/blogimg01:v1'
 }
 stage('Push the iamge to Docker Hub') {
 steps {
-// sh 'echo "$DOCKER_PASS" | sudo docker login -u "$DOCKER_USER" --password-stdin'
-sh 'sudo docker push rachita06/blogimg01:v1'
-sh 'sudo docker logout'
+// sh 'echo "$DOCKER_PASS" |  docker login -u "$DOCKER_USER" --password-stdin'
+sh ' docker push rachita06/blogimg01:v1'
+sh ' docker logout'
 }
 }
 

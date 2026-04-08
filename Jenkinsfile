@@ -1,60 +1,55 @@
 pipeline {
     agent any
-
-    environment {
-        // Optional: define global variables if needed
+     options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
     }
 
     stages {
-
-        stage('Checkout from GitHub') {
+        stage('Checkout') {
             steps {
-                // Use credentials for GitHub if repo is private
-                git branch: 'main', 
-                    url: 'https://github.com/rachita06/DevOps-proj.git', 
+                git branch: 'main',
+                    url: 'https://github.com/rachita06/DevOps-proj.git',
                     credentialsId: 'git-06'
             }
         }
+	stage('Check Files') {
+	   steps {
+	      sh 'ls -ltr'
+	      sh ' docker ps'
+        }
+	}
 
-        stage('Docker Login') {
+       stage('Docker Login') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'docker-06',
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh '''
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    '''
-                }
-            }
+                )])
+		{
+            sh 'echo $DOCKER_PASS |  docker login -u $DOCKER_USER --password-stdin'
         }
+		}
+		}
+      
+      stage('Build Image') {
+      steps {
+             sh 'cd blog &&  docker build -t blogimg01 .'
+	     }
+	     }
+stage('Tag the image') {
+steps {
+sh 'sudo docker image tag blogimg01 rachita06/blogimg01:v1'
+}
+}
+stage('Push the iamge to Docker Hub') {
+steps {
+// sh 'echo "$DOCKER_PASS" | sudo docker login -u "$DOCKER_USER" --password-stdin'
+sh 'sudo docker push rachita06/blogimg01:v1'
+sh 'sudo docker logout'
+}
+}
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t blogimg01 .'
-            }
-        }
 
-        stage('Tag Docker Image') {
-            steps {
-                sh 'docker tag blogimg01 rachita06/blogimg01:v1'
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                sh 'docker push rachita06/blogimg01:v1'
-            }
-        }
-    }
-
-    post {
-        failure {
-            echo "Pipeline failed. Check logs for errors."
-        }
-        success {
-            echo "Pipeline completed successfully!"
-        }
-    }
+}
 }

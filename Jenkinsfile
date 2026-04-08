@@ -48,8 +48,25 @@ steps {
 sh ' docker push rachita06/blogimg01:v1'
 sh ' docker logout'
 }
-}
-
 
 }
+stage('kubernates Deploy'){
+steps{
+
+sh '''
+kubectl apply -f k8/deploy.yaml
+kubectl apply -f k8/service.yaml
+'''
+}
+}
+post {
+success{
+echo "pipeline successful"
+}
+failure
+{
+echo"pipeline failed"
+}
+}
+
 }

@@ -21,7 +21,14 @@ stage('Docker Login') {
                     passwordVariable: 'DOCKER_PASS'
                 )])
 		{
-            sh 'echo $DOCKER_PASS |  docker login -u $DOCKER_USER --password-stdin'
+            sh '''
+           cd blog docker build -t blogimg01 .
+           docker image tag blogimg01 rachita06/blogimg01:v1
+           
+          echo $DOCKER_PASS |  docker login -u $DOCKER_USER --password-stdin
+           docker push rachita06/blogimg01:v1
+           docker logout
+            '''
         }
 		}
 		}

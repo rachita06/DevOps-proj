@@ -28,7 +28,7 @@ stage('Docker Login') {
       
       stage('Build Image') {
       steps {
-             sh 'cd blog &&  docker build -t blogimg01 .'
+             sh 'cd blog &&  ls -ltr .'
 	     }
 	     }
 }

@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "yourdockerhubusername/devops-app"
+        DOCKER_IMAGE = "rachita06/DevOps-proj"
         DOCKER_TAG = "latest"
     }
 

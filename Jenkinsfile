@@ -22,7 +22,7 @@ stage('Docker Login') {
                 )])
 		{
             sh '''
-           cd blog docker build -t blogimg01 .
+           cd blog && docker build -t blogimg01 .
            docker image tag blogimg01 rachita06/blogimg01:v1
            
           echo $DOCKER_PASS |  docker login -u $DOCKER_USER --password-stdin
@@ -32,11 +32,5 @@ stage('Docker Login') {
         }
 		}
 		}
-      
-      stage('Build Image') {
-      steps {
-             sh 'cd blog &&  ls -ltr &&  cat Dockerfile .'
-	     }
-         	     }
 }
 }

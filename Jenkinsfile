@@ -7,9 +7,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master',
-                    url: 'https://github.com/susigugh/proj-feb.git',
-                    credentialsId: 'git-01'
+                git branch: 'main',
+                    url: 'https://github.com/rachita06/DevOps-proj.git',
+                    credentialsId: 'git-06'
             }
         }
 }

@@ -34,12 +34,10 @@ stage('Docker Login') {
 		}
 stage('Deploy to Kubernetes') {
     steps {
-        sshagent(['gcp-ssh-key']) {
-            sh '''
-            ssh -o StrictHostKeyChecking=no raj242adk@10.128.0.9 \
-            "kubectl apply -f /home/raj242adk/deploy.yaml"
-            '''
-        }
+        sh '''
+        ssh raj242adk@10.128.0.9 \
+        "kubectl set image deployment/blog-app blogimg01=rachita06/blogimg01:v1"
+        '''
     }
 }
 }

@@ -32,11 +32,15 @@ stage('Docker Login') {
         }
 		}
 		}
-
-stage('Copy deploy.yaml to Kubernetes Server') {
-steps {
-sh 'scp deploy.yaml raj242adk@10.128.0.9:/home/raj242adk/'
-}
+stage('Deploy to Kubernetes') {
+    steps {
+        sshagent(['gcp-ssh-key']) {
+            sh '''
+            ssh -o StrictHostKeyChecking=no raj242adk@10.128.0.9 \
+            "kubectl apply -f /home/raj242adk/deploy.yaml"
+            '''
+        }
+    }
 }
 }
 }

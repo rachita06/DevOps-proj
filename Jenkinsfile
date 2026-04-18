@@ -23,7 +23,7 @@ stage('Docker Login') {
 		{
             sh '''
            cd blog && docker build --no-cache -t blogimg01:v1 .
-           docker image tag blogimg01 rachita06/blogimg01:v1
+           docker image tag blogimg01:v1 rachita06/blogimg01:v1
            
           echo $DOCKER_PASS |  docker login -u $DOCKER_USER --password-stdin
            docker push rachita06/blogimg01:v1

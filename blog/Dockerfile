@@ -1,5 +1,5 @@
 FROM ubuntu:22.04
 
-RUN apt update && apt install -y wget gnupg curl
-
-# MongoDB install (proper Debian way)
+RUN apt-get update && apt-get install -y \
+    wget gnupg curl \
+    && rm -rf /var/lib/apt/lists/*

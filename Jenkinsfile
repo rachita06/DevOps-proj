@@ -32,5 +32,11 @@ stage('Docker Login') {
         }
 		}
 		}
+
+stage('Copy deploy.yaml to Kubernetes Server') {
+steps {
+sh 'scp deploy.yaml ec2-user@172.31.24.198:/home/ec2-user/'
+}
+}
 }
 }

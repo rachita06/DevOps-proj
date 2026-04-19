@@ -38,6 +38,7 @@ stage('Copy deploy.yaml to Kubernetes Server') {
 steps {
 sh ''' 
 scp -o StrictHostKeyChecking=no deploy.yaml raj242adk@34.57.153.220:/home/rachita/DevOps-proj/
+'''
 }
 
 }

@@ -33,17 +33,19 @@ stage('Docker Login') {
 		}
 
 } 
-		}
+   
+}
+
+
 stage('Copy deploy.yaml to Kubernetes Server') {
-steps {
-sh ''' 
-scp -i /var/lib/jenkins/.ssh/id_rsa \
--o StrictHostKeyChecking=no \
-deploy.yaml raj242adk@34.57.153.220:/home/rachita/DevOps-proj/
-'''
+    steps {
+        sh '''
+        scp -i /home/raj242adk/.ssh/id_rsa \
+        -o StrictHostKeyChecking=no \
+        deploy.yaml raj242adk@34.57.153.220:/home/raj242adk/
+        '''
+    }
+}		}
 }
-
 }
-}
-
 }

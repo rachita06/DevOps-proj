@@ -34,10 +34,10 @@ stage('Docker Login') {
 		}
 stage('Deploy to Kubernetes') {
     steps {
-        sh '''
-        ssh raj242adk@10.128.0.9 \
-        "kubectl set image deployment/blog-app blogimg01=rachita06/blogimg01:v1"
-        '''
+        sh 'scp deploy.yaml root@10.128.0.14:/root/'
+       
+
+    
     }
 }
 }

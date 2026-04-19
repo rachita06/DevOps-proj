@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
      options {
@@ -29,18 +30,16 @@ stage('Docker Login') {
            docker push rachita06/blogimg01:v1
            docker logout
             '''
-        }
-		}
 		}
 
-stage('Deploy to Kubernetes') {
-    steps {
-        sh '''
-        scp -o StrictHostKeyChecking=no deploy.yaml raj242adk@10.128.0.14:/home/raj242adk/
-        ssh raj242adk@10.128.0.14 "kubectl apply -f /home/raj242adk/deploy.yaml"
-        '''
-    }
 }
+ 		}
+stage('Copy deploy.yaml to Kubernetes Server') {
+steps {
+sh 'scp deploy.yaml raj242adk@10.128.0.14:/home/raj242adk/'
+}
+}
+
 }
 }
 

@@ -32,13 +32,15 @@ stage('Docker Login') {
         }
 		}
 		}
+
 stage('Deploy to Kubernetes') {
-            steps {
-                sh '''
-                scp -o StrictHostKeyChecking=no deploy.yaml root@10.128.0.14:/root/
-                ssh -o StrictHostKeyChecking=no root@10.128.0.14 "kubectl apply -f /root/deploy.yaml"
-                '''  
+    steps {
+        sh '''
+        scp -o StrictHostKeyChecking=no deploy.yaml raj242adk@10.128.0.14:/home/raj242adk/
+        ssh raj242adk@10.128.0.14 "kubectl apply -f /home/raj242adk/deploy.yaml"
+        '''
     }
 }
 }
 }
+

@@ -32,8 +32,8 @@ stage('Docker Login') {
             '''
 		}
 
-}
- 		}
+} 
+		}
 stage('Copy deploy.yaml to Kubernetes Server') {
 steps {
 sh ''' 

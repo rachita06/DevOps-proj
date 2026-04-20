@@ -38,10 +38,11 @@ stage('Deploy to Kubernetes') {
         ssh -i /var/lib/jenkins/.ssh/id_rsa \
         -o StrictHostKeyChecking=no \
         raj242adk@136.111.110.132 \
-        "kubectl apply -f /home/raj242adk/deploy.yaml && kubectl apply -f /home/raj242adk/service.yaml"
+        "export KUBECONFIG=/home/raj242adk/.kube/config && \
+        kubectl apply -f /home/raj242adk/deploy.yaml && \
+        kubectl apply -f /home/raj242adk/service.yaml"
         '''
     }
 }
-
 
 }}

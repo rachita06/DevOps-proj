@@ -1,48 +1,50 @@
-
 pipeline {
     agent any
-     options {
+
+    options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/rachita06/DevOps-proj.git',
                     credentialsId: 'git-06'
             }
+        }
 
-           }
-stage('Docker Login') {
-    steps {
-        withCredentials([usernamePassword(
-            credentialsId: 'docker-06',
-            usernameVariable: 'DOCKER_USER',
-            passwordVariable: 'DOCKER_PASS'
-        )]) {
-            sh '''
-            cd blog && docker build --no-cache -t blogimg01:v1 .
-            docker image tag blogimg01:v1 rachita06/blogimg01:v1
+        stage('Docker Build & Push') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-06',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                    cd blog
+                    docker build --no-cache -t blogimg01:v1 .
+                    docker tag blogimg01:v1 rachita06/blogimg01:v1
 
-            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-            docker push rachita06/blogimg01:v1
-            docker logout
-            '''
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    docker push rachita06/blogimg01:v1
+                    docker logout
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                ssh -i /var/lib/jenkins/.ssh/id_rsa -o StrictHostKeyChecking=no raj242adk@10.128.0.14 "
+                export KUBECONFIG=/home/raj242adk/.kube/config &&
+                kubectl apply -f /home/raj242adk/deploy.yaml &&
+                kubectl apply -f /home/raj242adk/service.yaml
+                "
+                '''
+            }
         }
     }
 }
-stage('Deploy to Kubernetes') {
-    steps {
-        sh '''
-        ssh -i /var/lib/jenkins/.ssh/id_rsa \
-        -o StrictHostKeyChecking=no \
-        raj242adk@10.128.0.14 \
-        "export KUBECONFIG=/home/raj242adk/.kube/config && \
-        kubectl apply -f /home/raj242adk/deploy.yaml && \
-        kubectl apply -f /home/raj242adk/service.yaml"
-        '''
-    }
-}
-
-}}

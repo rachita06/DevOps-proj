@@ -38,7 +38,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh '''
-                ssh -i /var/lib/jenkins/.ssh/id_rsa -o StrictHostKeyChecking=no raj242adk@10.128.0.14 "
+                ssh -i /var/lib/jenkins/.ssh/id_rsa -o StrictHostKeyChecking=no raj242adk@10.128.0.16 "
                 export KUBECONFIG=/home/raj242adk/.kube/config &&
                 kubectl apply -f /home/raj242adk/deploy.yaml &&
                 kubectl apply -f /home/raj242adk/service.yaml

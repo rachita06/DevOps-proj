@@ -1,5 +1,11 @@
-FROM ubuntu:22.04
+FROM node:18
 
-RUN apt-get update && apt-get install -y \
-    wget gnupg curl \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 80
+
+CMD ["npm", "start"]

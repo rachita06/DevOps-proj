@@ -35,5 +35,11 @@ pipeline {
             }
         }
 
+stage('copy deploy.yaml to kubernates server')
+{
+steps{
+sh'scp deploy.yaml raj242adk@10.128.0.18:/home/raj242adk'
+}
+}
     }
 }

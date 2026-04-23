@@ -10,8 +10,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/rachita06/DevOps-proj.git',
-                    credentialsId: 'git-06'
+                url: 'https://github.com/rachita06/DevOps-proj.git',
+                credentialsId: 'git-06'
             }
         }
 
@@ -24,9 +24,7 @@ pipeline {
                 )]) {
                     sh '''
                     cd blog
-                    docker build --no-cache -t blogimg01:v1 .
-                    docker tag blogimg01:v1 rachita06/blogimg01:v1
-
+                    docker build -t rachita06/blogimg01:v1 .
                     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                     docker push rachita06/blogimg01:v1
                     docker logout
@@ -35,11 +33,26 @@ pipeline {
             }
         }
 
-stage('copy deploy.yaml to kubernates server')
-{
-steps{
-sh'scp -o StrictHostKeyChecking=no deploy.yaml raj242adk@10.128.0.18:/home/raj242adk'
-}
-}
+        stage('Copy K8s Files') {
+            steps {
+                sh '''
+                scp -o StrictHostKeyChecking=no deploy.yaml raj242adk@10.128.0.18:/home/raj242adk/
+                scp -o StrictHostKeyChecking=no service.yaml raj242adk@10.128.0.18:/home/raj242adk/
+                '''
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                ssh -o StrictHostKeyChecking=no raj242adk@10.128.0.18 "
+                kubectl apply -f /home/raj242adk/deploy.yaml &&
+                kubectl apply -f /home/raj242adk/service.yaml &&
+                kubectl get pods &&
+                kubectl get svc
+                "
+                '''
+            }
+        }
     }
 }

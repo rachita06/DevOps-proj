@@ -1,10 +1,12 @@
 pipeline {
     agent any
-     options {
+
+    options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -44,7 +46,7 @@ pipeline {
             }
         }
 
-        stage('Push the iamge to Docker Hub') {
+        stage('Push the image to Docker Hub') {
             steps {
                 sh 'docker push rachita06/blogimg01:v1'
                 sh 'docker logout'
@@ -69,13 +71,13 @@ pipeline {
                     set -e
                     cd /home/raj242adk/
 
-                    kubectl --kubeconfig=/home/raj242adk/admin.conf create namespace dev || true
+                    kubectl create namespace dev || true
 
-                    kubectl --kubeconfig=/home/raj242adk/admin.conf apply -f deploy.yaml
-                    kubectl --kubeconfig=/home/raj242adk/admin.conf apply -f service.yaml
+                    kubectl apply -f deploy.yaml
+                    kubectl apply -f service.yaml
 
-                    kubectl --kubeconfig=/home/raj242adk/admin.conf get pods -n dev
-                    kubectl --kubeconfig=/home/raj242adk/admin.conf get svc -n dev
+                    kubectl get pods -n dev
+                    kubectl get svc -n dev
                     "
                     '''
                 }

@@ -7,9 +7,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master',
-                    url: 'https://github.com/susigugh/proj-feb.git',
-                    credentialsId: 'git-01'
+                git branch: 'main',
+                    url: 'https://github.com/rachita06/DevOps-proj.git',
+                    credentialsId: 'git-06'
             }
         }
 	stage('Check Files') {
@@ -22,7 +22,7 @@ pipeline {
        stage('Docker Login') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'docker-01',
+                    credentialsId: 'docker-06',
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )])
@@ -39,13 +39,13 @@ pipeline {
 	     }
 stage('Tag the image') {
 steps {
-sh 'sudo docker image tag blogimg01 amcnssstd/blogimg01:v1'
+sh 'sudo docker image tag blogimg01 rachita06/blogimg01:v1'
 }
 }
 stage('Push the iamge to Docker Hub') {
 steps {
 // sh 'echo "$DOCKER_PASS" | sudo docker login -u "$DOCKER_USER" --password-stdin'
-sh 'sudo docker push amcnssstd/blogimg01:v1'
+sh 'sudo docker push rachita06/blogimg01:v1'
 sh 'sudo docker logout'
 }
 }

@@ -52,26 +52,28 @@ sh 'docker logout'
 
 stage('Copy deploy.yaml to Kubernetes Server') {
 steps {
-sh 'chmod 600 id_rsa'
-sh 'scp -o StrictHostKeyChecking=no -i id_rsa *.yaml raj242adk@10.128.0.18:/home/raj242adk/'
+sshagent(['ssh-key-id']) {
+sh '''
+scp -o StrictHostKeyChecking=no *.yaml raj242adk@34.134.162.124:/home/raj242adk/
+'''
+}
 }
 }
 
-
-stage('Deploy the deployment in Kubernetes Server') {
+stage('Deploy to Kubernetes') {
 steps {
-sh 'chmod 600 id_rsa'
-sh 'ssh -o StrictHostKeyChecking=no -i id_rsa raj242adk@10.128.0.18 "cd /home/raj242adk/ && export KUBECONFIG=/home/raj242adk/admin.conf && kubectl create -f deploy.yaml"'
+sshagent(['ssh-key-id']) {
+sh '''
+ssh -o StrictHostKeyChecking=no raj242adk@34.134.162.124 "
+cd /home/raj242adk/
+export KUBECONFIG=/home/raj242adk/admin.conf
+kubectl apply -f deploy.yaml
+kubectl apply -f service.yaml
+"
+'''
 }
 }
-
-stage('Create the service in Kubernetes Server') {
-steps {
-sh 'chmod 600 id_rsa'
-sh 'ssh -o StrictHostKeyChecking=no -i raj242adk@10.128.0.18 "cd /home/raj242adk/ && export KUBECONFIG=/home/raj242adk/admin.conf && kubectl create -f service.yaml"'
 }
-}
-
 
 }
 }

@@ -66,10 +66,14 @@ pipeline {
                 sshagent(['ssh-key-id']) {
                     sh '''
                     ssh -o StrictHostKeyChecking=no raj242adk@34.134.162.124 "
+                    set -e
                     cd /home/raj242adk/
-                    export KUBECONFIG=/home/raj242adk/admin.conf
-                    kubectl apply -f deploy.yaml
-                    kubectl apply -f service.yaml
+
+                    kubectl --kubeconfig=/home/raj242adk/admin.conf apply -f deploy.yaml
+                    kubectl --kubeconfig=/home/raj242adk/admin.conf apply -f service.yaml
+
+                    kubectl --kubeconfig=/home/raj242adk/admin.conf get pods
+                    kubectl --kubeconfig=/home/raj242adk/admin.conf get svc
                     "
                     '''
                 }

@@ -69,11 +69,13 @@ pipeline {
                     set -e
                     cd /home/raj242adk/
 
+                    kubectl --kubeconfig=/home/raj242adk/admin.conf create namespace dev || true
+
                     kubectl --kubeconfig=/home/raj242adk/admin.conf apply -f deploy.yaml
                     kubectl --kubeconfig=/home/raj242adk/admin.conf apply -f service.yaml
 
-                    kubectl --kubeconfig=/home/raj242adk/admin.conf get pods
-                    kubectl --kubeconfig=/home/raj242adk/admin.conf get svc
+                    kubectl --kubeconfig=/home/raj242adk/admin.conf get pods -n dev
+                    kubectl --kubeconfig=/home/raj242adk/admin.conf get svc -n dev
                     "
                     '''
                 }

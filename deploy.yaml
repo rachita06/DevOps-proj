@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: blog-deployment
+  name: dep-blog
+  namespace: dev
+  labels:
+    app: blog
+    frontend: node
 spec:
-replicas: 1
-selector:
-matchLabels:
-app: blog
-template:
-metadata:
-labels:
-app: blog
-spec:
-containers:
-- name: blog-container
-image: rachita06/blogimg01:v1
-ports:
-- containerPort: 80
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blog
+  template:
+    metadata:
+      name: temp-blog
+      labels:
+        app: blog
+    spec:
+      containers:
+        - name: blog
+          image: amcnssstd/blogimg01:v1
